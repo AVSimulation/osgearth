@@ -5,6 +5,7 @@
 #include <cmath>
 #include <memory>
 #include <vector>
+#include <limits>
 
 namespace mapbox {
 
