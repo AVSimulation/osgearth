@@ -181,7 +181,11 @@ Geometry::buffer(double distance,
             ? params._cornerSegs
             : 8; //buffer::BufferParameters::DEFAULT_QUADRANT_SEGMENTS;
 
+#if GEOS_VERSION_MINOR >= 11
+	std::unique_ptr<geom::Geometry> outGeom = NULL;
+#else
         geom::Geometry* outGeom = NULL;
+#endif
 
         buffer::BufferParameters geosBufferParams;
         geosBufferParams.setQuadrantSegments( geosQuadSegs );
@@ -214,8 +218,13 @@ Geometry::buffer(double distance,
 
         if ( outGeom )
         {
+#if GEOS_VERSION_MINOR >= 11
+            output = gc.exportGeometry( outGeom.get() );
+            gc.disposeGeometry( outGeom.get() );
+#else
             output = gc.exportGeometry( outGeom );
             gc.disposeGeometry( outGeom );
+#endif
         }
 
         gc.disposeGeometry( inGeom );
